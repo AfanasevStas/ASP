@@ -1,0 +1,10 @@
+﻿@page "/Power"
+@rendermode InteractiveServer
+<h1>Power</h1>
+Введите число:
+<input type="number" @bind="a" />
+Введите степень:
+<input type="number" @bind="b" />
+<button @onclick="power">Рассчитать</button>
+<h3> Результат: @c</h3>
+

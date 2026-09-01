@@ -1,0 +1,8 @@
+﻿@page "/Fibonacci"
+@rendermode InteractiveServer
+<h3>Fibonacci</h3>
+
+Введите число элементов Фиббоначи:
+<input type="number" @bind="a" />
+<button @onclick="power">Рассчитать</button>
+<h3> Результат: @result</h3>
