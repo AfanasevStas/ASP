@@ -1,7 +1,21 @@
 ﻿@page "/Option-4"
-<h3>Option_4</h3>
+@rendermode InteractiveServer
 
+<h3>Option_4</h3>
+Перевод шестнадцатиричного числа в десятичную систему счисления:
+Введите число:
+<input type="text" @bind="b" @bind:after="Process" />
+<br>
+Ваше число в десятичной системе: @c
 @code
 {
+    int a = 0;
+    string b;
+    string c;
+    void Process()
+    {
+        a = Convert.ToInt32(b, 16);
+        c = Convert.ToString(a, 10);
+    }
 
 }

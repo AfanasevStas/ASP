@@ -1,7 +1,21 @@
 ﻿@page "/Option-5"
-<h3>Option_5</h3>
+@rendermode InteractiveServer
 
+<h3>Option_5</h3>
+Перевод двоичного числа в шестнадцатиричную систему счисления:
+Введите число:
+<input type="text" @bind="b" @bind:after="Process" />
+<br>
+Ваше число в шестнадцатиричной системе: @c
 @code
 {
+    int a = 0;
+    string b;
+    string c;
+    void Process()
+    {
+        a = Convert.ToInt32(b, 2);
+        c = Convert.ToString(a, 16);
+    }
 
 }
