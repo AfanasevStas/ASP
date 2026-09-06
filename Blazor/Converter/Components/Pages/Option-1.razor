@@ -1,0 +1,19 @@
+﻿@page "/Option-1"
+@rendermode InteractiveServer
+
+<h3>Option_1</h3>
+Перевод десятичного числа в двоичную систему счисления:
+Введите число:
+<input tipe="number" @bind="a" @bind:after="Process" />
+<br>
+Ваше число в двоичной системе: @b
+@code
+{
+    int a = 0;
+    string b;
+    void Process()
+    {
+        b = Convert.ToString(a, 2);
+    }
+    
+}
