@@ -4,7 +4,20 @@
 	justify-content: space-between;
 }
 
+
 .poster-container
 {
 	margin: 5%;
+}
+
+.container-edit
+{
+	display: flex;
+	justify-content: space-between;
+}
+
+.edit-button-save
+{
+	width: 50px;
+	margin-top: 0.5%;
 }

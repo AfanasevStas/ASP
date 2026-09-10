@@ -43,13 +43,19 @@ else
                     <InputText id="url" @bind-Value="Movie.URL" class="form-control" />
                     <ValidationMessage For="() => Movie.URL" class="text-danger" />
                 </div>
-                <div class="mb-3">
-                    <label for="poster" class="form-label">Poster:</label>
-                    <InputText id="poster" @bind-Value="Movie.Poster" class="form-control" />
-                    <ValidationMessage For="() => Movie.Poster" class="text-danger" />
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="mb-3">
+                        <label for="poster" class="form-label">Poster:</label>
+                        <InputText id="poster" @bind-Value="Movie.Poster" class="form-control" />
+                        <ValidationMessage For="() => Movie.Poster" class="text-danger" />
+                    </div>
             </EditForm>
+        </div>
+
+        <div class="container-edit">
+            <img src="@Movie.Poster" alt="@Movie.Title poster" />
+        </div>
+        <div class="edit-button-save">
+            <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </div>
 }
