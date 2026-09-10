@@ -10,14 +10,8 @@
 	margin: 5%;
 }
 
-.container-edit
-{
-	display: flex;
-	justify-content: space-between;
-}
-
 .edit-button-save
 {
 	width: 50px;
-	margin-top: 0.5%;
+	margin-top: 5%;
 }
