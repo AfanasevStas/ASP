@@ -9,6 +9,7 @@ namespace Movies.Models
         [Required]
         //[StringLength(50,MinimumLength=2)]
         [MinLength(2, ErrorMessage="Слишком малый текст"), MaxLength(50, ErrorMessage = "Слишком малый текст")]
+        [Display(Name = "Название")]
         public string Title { get; set; }
         [RangeAttribute(typeof(DateOnly), "1888-10-14", "2128-12-31", ErrorMessage = "Либо не снимали, либо ещё не успели снять")]
         [Display(Name ="Дата выхода")]
