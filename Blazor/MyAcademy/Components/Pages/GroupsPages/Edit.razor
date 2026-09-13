@@ -1,0 +1,109 @@
+@page "/groupss/edit"
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Classes
+@inject IDbContextFactory<MyAcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Groups</h2>
+<hr />
+@if (Groups is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Groups" OnValidSubmit="UpdateGroups" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Groups.group_id" value="@Groups.group_id" />
+                <div class="mb-3">
+                    <label for="group_name" class="form-label">group_name:</label>
+                    <InputText id="group_name" @bind-Value="Groups.group_name" class="form-control" />
+                    <ValidationMessage For="() => Groups.group_name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="direction" class="form-label">direction:</label>
+                    <InputNumber id="direction" @bind-Value="Groups.direction" class="form-control" />
+                    <ValidationMessage For="() => Groups.direction" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">start_date:</label>
+                    <InputDate id="start_date" @bind-Value="Groups.start_date" class="form-control" />
+                    <ValidationMessage For="() => Groups.start_date" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="start_time" class="form-label">start_time:</label>
+                    <InputDate id="start_time" @bind-Value="Groups.start_time" class="form-control" />
+                    <ValidationMessage For="() => Groups.start_time" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="learning_days" class="form-label">learning_days:</label>
+                    <InputNumber id="learning_days" @bind-Value="Groups.learning_days" class="form-control" />
+                    <ValidationMessage For="() => Groups.learning_days" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/groupss">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int group_id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Groups? Groups { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Groups ??= await context.Groups.FirstOrDefaultAsync(m => m.group_id == group_id);
+
+        if (Groups is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateGroups()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Groups!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!GroupsExists(Groups!.group_id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/groupss");
+    }
+
+    private bool GroupsExists(int group_id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Groups.Any(e => e.group_id == group_id);
+    }
+}
