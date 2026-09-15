@@ -11,11 +11,29 @@
 
 <h1>Index</h1>
 
-<p>
-    <a href="movies/create">Create New</a>
-</p>
 
-<QuickGrid Class="table" Items="context.Movie" Pagination="pagination">
+
+
+<div class="input">
+    <p>
+        <a href="movies/create" class="btn btn-primary">Добавить</a>
+    </p>
+    <form action="/movies">
+        <input type="search" name="titleFilter"/>
+        <input type="submit" value="Найти"/>
+    </form>
+    <div>
+        <label for="items-per-page">Элементов на странице: </label>
+        <select @bind="pagination.ItemsPerPage" id="items-per-page">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+</div>
+
+<QuickGrid Class="table" Items="FilteredMovies" Pagination="pagination">
     @* <PropertyColumn Property="movie => movie.Title" /> *@
     <TemplateColumn Context="movie" Title="Title">
             <a href="@($"movies/details?id={movie.Id}")">@movie.Title"</a>
@@ -34,8 +52,11 @@
 </QuickGrid>
     <Paginator State="pagination"/>
 
-@code {
+@code 
+{
     private MoviesContext context = default!;
+    [SupplyParameterFromQuery]
+    string? TitleFilter { get; set; }
 
     // int a = 1;
     PaginationState pagination = new PaginationState { ItemsPerPage = 3 };
@@ -46,4 +67,6 @@
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
+    IQueryable<Movie> FilteredMovies => context.Movie.Where(
+        m => m.Title.Contains(TitleFilter ?? string.Empty));
 }
