@@ -17,7 +17,7 @@ namespace Academy.Models
         public DateOnly? start_date { get; set; }
         public TimeOnly? start_time { get; set; }
         [Column(TypeName = "TINYINT")]
-        public int? learning_days { get; set; }
+        public int? learning_days { get; set; } = 0;
 
         public Direction Direction { get; set; }
 
