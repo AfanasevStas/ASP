@@ -78,9 +78,8 @@
     IQueryable<Student> FilteredStudents =>
 context.Students.Where(m => m.FullName.Contains(StudentFilter ?? string.Empty));
 
-    IQueryable<Student> FilteredStudents2 =>
-        context.Students
-            .Include(s => s.Group).ThenInclude(g => g.Direction)
-            .Where(s => string.IsNullOrEmpty(StudentFilter)
-                || s.last_name.Contains(StudentFilter ?? string.Empty));
+    IQueryable<Academy.Models.Student> FilteredStudents2 =>
+    context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)
+    .AsEnumerable().Where(s => s.FullName.Contains(StudentFilter ?? string.Empty))
+    .AsQueryable();
 }
