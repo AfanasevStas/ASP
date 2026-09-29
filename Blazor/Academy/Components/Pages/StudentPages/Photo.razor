@@ -20,6 +20,8 @@
     public Models.Human Human { get; set; }
     [Parameter]
     public bool AllowChange { get; set; }
+    [Parameter]
+    public EventCallback<byte[]> OnPhotoChanged { get; set; }
 
     IBrowserFile url { get; set; }
     async Task LoadPhoto(InputFileChangeEventArgs e)
@@ -27,7 +29,10 @@
         url = e.File;
         MemoryStream memoryStream = new MemoryStream();
         await url.OpenReadStream(1024*1024*10).CopyToAsync(memoryStream);
-        Human.photo = memoryStream.ToArray();
+        byte[] bytes = memoryStream.ToArray();
+
+        Human.photo = bytes;
+        await OnPhotoChanged.InvokeAsync(bytes);
         memoryStream.Close();
     }
 }
