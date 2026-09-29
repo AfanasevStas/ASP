@@ -1,17 +1,18 @@
 ﻿@* <h3>Фото:</h3> *@
 
-<div>
+
     <div class="photo-area">
-        @if (Human.photo != null)
+        <div>
+            @if (Human.photo != null)
+            {
+                <img src="data:image;base64,@Convert.ToBase64String(Human.photo)" alt="Photo"/>
+            }
+        </div>
+        @if (AllowChange)
         {
-            <img src="data:image;base64,@Convert.ToBase64String(Human.photo)" alt="Photo"/>
+            <InputFile OnChange="LoadPhoto" class="form-control choose-photo"/>
         }
     </div>
-    @if (AllowChange)
-    {
-        <InputFile OnChange="LoadPhoto"/>
-    }
-</div>
 
 @code 
 {
@@ -25,7 +26,7 @@
     {
         url = e.File;
         MemoryStream memoryStream = new MemoryStream();
-        await url.OpenReadStream().CopyToAsync(memoryStream);
+        await url.OpenReadStream(1024*1024*10).CopyToAsync(memoryStream);
         Human.photo = memoryStream.ToArray();
         memoryStream.Close();
     }
