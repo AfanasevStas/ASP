@@ -19,13 +19,13 @@
             <ValidationSummary class="text-danger" role="alert" />
             <div class="human-container">
                 <div class="human-text-fields">
-                    <div class="mb-3">
+@*                     <div class="mb-3">
                         <span class="text-danger">*</span>
                         <label for="group" class="form-label">group:</label>
                         <InputNumber id="group" @bind-Value="Student.group" class="form-control" aria-required="true" />
                         <ValidationMessage For="() => Student.group" class="text-danger" />
                     </div>
-                    <div class="mb-3">
+ *@                    <div class="mb-3">
                         <span class="text-danger">*</span>
                         <label for="last_name" class="form-label">last_name:</label>
                         <InputText id="last_name" @bind-Value="Student.last_name" class="form-control" aria-required="true" />
@@ -58,6 +58,7 @@
                         <InputText id="phone" @bind-Value="Student.phone" class="form-control" />
                         <ValidationMessage For="() => Student.phone" class="text-danger" />
                     </div>
+                    <CB_Groups Student="Student" />
                 </div>
                 <Photo Human="@Student" AllowChange=true OnPhotoChanged="OnPhotoReceived" />
             </div>
