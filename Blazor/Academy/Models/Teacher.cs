@@ -12,5 +12,7 @@ namespace Academy.Models
         public DateOnly work_since { get; set; }
         [Column("rate",TypeName = "SMALLMONEY")]
         public int rate { get; set; }
+
+        public ICollection<TeachersDisciplinesRelation> TDR { get; set; }
     }
 }
