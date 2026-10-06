@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
@@ -13,6 +14,6 @@ namespace Academy.Models
         [Column("rate",TypeName = "SMALLMONEY")]
         public int rate { get; set; }
 
-        public ICollection<TeachersDisciplinesRelation> TDR { get; set; }
+        public ObservableCollection<TeachersDisciplinesRelation> TDR { get; set; }
     }
 }

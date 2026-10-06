@@ -1,5 +1,4 @@
 @page "/disciplines/details"
-@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -7,31 +6,28 @@
 
 <PageTitle>Details</PageTitle>
 
-<h1>Details</h1>
+@* <h1>Details</h1> *@
 
 <div>
-    <h2>Discipline</h2>
-    <hr />
+@*     <h2>Discipline</h2>
+    <hr /> *@
     @if (discipline is null)
     {
         <p><em>Loading...</em></p>
     }
     else {
+        <h1>@discipline.discipline_name</h1>
+        <br />
         <dl class="row">
-            <dt class="col-sm-2">discipline_name</dt>               <dd class="col-sm-10">@discipline.discipline_name</dd>
-            <dt class="col-sm-2">number_of_lessons</dt>             <dd class="col-sm-10">@discipline.number_of_lessons</dd>
-@*             <dt class="col-sm-2">TDR</dt>                           <dd class="col-sm-10">@discipline.TDR</dd> *@
+            <dt class="col-sm-2">discipline_name</dt>
+            <dd class="col-sm-10">@discipline.discipline_name</dd>
+            <dt class="col-sm-2">number_of_lessons</dt>
+            <dd class="col-sm-10">@discipline.number_of_lessons</dd>
+            <dt class="col-sm-2">TDR</dt>
+            <dd class="col-sm-10">@discipline.TDR</dd>
         </dl>
-        <h3>Преподаватели - @discipline.TDR.Count():</h3>
-        <ul>
-            @foreach (TeachersDisciplinesRelation tdr in discipline.TDR)
-            {
-                <li>@tdr.Teacher.FullName</li>
-            }
-        </ul>
         <div>
             <a href="@($"/disciplines/edit?discipline_id={discipline.discipline_id}")">Edit</a> |
-            <a href="@($"disciplines/delete?discipline_id={discipline.discipline_id}")">Delete</a> |
             <a href="@($"/disciplines")">Back to List</a>
         </div>
     }
@@ -46,11 +42,7 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        // discipline = await context.Disciplines.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
-        discipline = await context.Disciplines
-                        .Include(t => t.TDR)
-                        .ThenInclude(tdr => tdr.Teacher)
-                        .FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+        discipline = await context.Disciplines.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
 
         if (discipline is null)
         {
