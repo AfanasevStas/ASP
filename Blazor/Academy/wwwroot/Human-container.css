@@ -3,6 +3,7 @@
 	display: flex;
 	justify-content: space-between;
 }
+.human-container
 
 .human-text-fields
 {
@@ -12,25 +13,26 @@
 
 .photo-area
 {
-	width: 50%;
+	width: 90%;
+	height:67vh;
 	text-align: center;
 }
 
-	.photo-area > div
-	{
-		width: 90%;
-		height: 90%;
-		border: solid 1px;
-	}
+.photo-area > div
+{
+	width: 90%;
+	height: 90%;
+	border: solid 1px;
+}
 
-	.photo-area img
-	{
-		object-fit: cover;
-		width: 100%;
-		min-width: 300px;
-		height: 100%;
-		min-height: 400px;
-	}
+.photo-area img
+{
+	object-fit: cover;
+	width: 100%;
+	min-width: 300px;
+	height: 100%;
+	min-height: 400px;
+}
 
 .choose-photo
 {
