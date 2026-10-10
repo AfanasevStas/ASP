@@ -89,7 +89,7 @@ else
                         </div>  
                         <div>
                             <Photo Human="Teacher" AllowChange=true />
-                            <AddDisciplines Teacher="Teacher" />
+                            <AddDisciplines @ref="AddDisciplines" Teacher="Teacher" />
                         </div>
                     </div>                    
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -108,6 +108,8 @@ else
 
     [SupplyParameterFromForm]
     private Teacher? Teacher { get; set; }
+
+    AddDisciplines? AddDisciplines;
 
     protected override async Task OnInitializedAsync()
     {
@@ -129,6 +131,7 @@ else
 
         try
         {
+            if (AddDisciplines != null) await AddDisciplines.Update();
             await context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
