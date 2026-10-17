@@ -78,21 +78,28 @@
     string nextDisabled = Model.HasNextPage     ? "" : "disabled"; 
 }
 
-<a  asp-action="Index"
-    asp-route-pageIndex="@(Model.PageIndex - 1)"
-    asp-route-searchString="@ViewData["CurrentFilter"]"
-    class="btn btn-default @prevDisabled"
-    >
-    Prev
-</a>
-
-<a  asp-action="Index"
-   asp-route-pageIndex="@(Model.PageIndex + 1)"
-   asp-route-searchString="@ViewData["CurrentFilter"]"
-    class="btn btn-default @nextDisabled"
-    >
-    Next
-</a>
+<div class="pagination-controls">
+    <a asp-action="Index"
+       asp-route-pageIndex="@(Model.PageIndex - 1)"
+       asp-route-searchString="@ViewData["CurrentFilter"]"
+       class="btn btn-outline-light @prevDisabled">
+        Prev
+    </a>
+    <div class="pagination-items">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <div class=@(i == Model.PageIndex ? "selected-page" : "pagination-item")>
+                @i
+            </div>
+        }
+    </div>
+    <a asp-action="Index"
+       asp-route-pageIndex="@(Model.PageIndex + 1)"
+       asp-route-searchString="@ViewData["CurrentFilter"]"
+       class="btn btn-outline-light @nextDisabled">
+        Next
+    </a>
+</div>
 
 
 
