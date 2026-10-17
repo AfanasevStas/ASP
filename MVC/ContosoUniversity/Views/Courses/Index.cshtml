@@ -1,10 +1,11 @@
-@model IEnumerable<ContosoUniversity.Models.Course>
+@* @model IEnumerable<ContosoUniversity.Models.Course> *@
+@model PaginatedList<Course>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Course</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,13 +14,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @* @Html.DisplayNameFor(model => model.Title) *@
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Credits)
+                @* @Html.DisplayNameFor(model => model.Credits) *@
+                Credits
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Enrollments)
+                @* @Html.DisplayNameFor(model => model.Enrollments) *@
+                Enrollments
             </th>
             <th></th>
         </tr>
@@ -45,3 +49,29 @@
 }
     </tbody>
 </table>
+@{
+    string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage ? "" : "disabled";
+}
+
+<div class="pagination-controls">
+    <a asp-action="Index"
+       asp-route-pageIndex="@(Model.PageIndex - 1)"
+       class="btn btn-outline-light @prevDisabled">
+        Prev
+    </a>
+    <div class="pagination-items">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a asp-action="Index" asp-route-pageIndex="@i"
+               class=@(i == Model.PageIndex ? "selected-page" : "pagination-item")>
+                @i
+            </a>
+        }
+    </div>
+    <a asp-action="Index"
+       asp-route-pageIndex="@(Model.PageIndex + 1)"
+       class="btn btn-outline-light @nextDisabled">
+        Next
+    </a>
+</div>
