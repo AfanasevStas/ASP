@@ -38,20 +38,23 @@
                        asp-route-searchString="@ViewData["CurrentFilter"]"
                        asp-route-itemsPerPage="@ViewData["ItemsPerPage"]">
 
-                        LastName
+                        @* LastName *@
+                        @Html.DisplayNameFor(m => Model.First().LastName)
                     </a>
                     @* @Html.DisplayNameFor(model => model.LastName) *@
                 </th>
                 <th>
                     @* @Html.DisplayNameFor(model => model.FirstName) *@
-                    FirstName
+                    @* FirstName *@
+                    @Html.DisplayNameFor(m => Model.First().FirstName)
                 </th>
                 <th>
                     <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]"
                        asp-route-searchString="@ViewData["CurrentFilter"]"
                        asp-route-itemsPerPage="@ViewData["ItemsPerPage"]">
                         @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
-                        EnrollmentDate
+                        @* EnrollmentDate *@
+                        @Html.DisplayNameFor(m => Model.First().EnrollmentDate)
                     </a>
                     @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
                 </th>
