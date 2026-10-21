@@ -19,7 +19,7 @@ public class StudentsController : Controller
         string sortOrder, 
         string searchString, 
         int? pageIndex,
-        int itemsPerPage=3
+        int itemsPerPage = 3
         )
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -48,6 +48,7 @@ public class StudentsController : Controller
             default:            students = students.OrderBy(s => s.LastName);                 break;
         }
 
+        ViewData["ItemsPerPage"] = itemsPerPage;
         int pageSize = itemsPerPage;
         return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageIndex ?? 1, pageSize));
         //return View(await students.ToListAsync());

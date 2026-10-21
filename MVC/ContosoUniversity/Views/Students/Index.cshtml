@@ -14,16 +14,16 @@
             <input type="submit" value="Поиск" class="btn btn-primary" />
             <a asp-action="Index" class="btn btn-dark">Сброс</a>
         </label>
+        <div>    
+            <label for="items-per-page">Items per page</label>
+            <select id="items-per-page" name="itemsPerPage" onchange="this.form.submit()">
+                <option value="3" selected="@(Convert.ToInt32(ViewData["ItemsPerPage"]) == 3)">3</option>
+                <option value="5" selected="@(Convert.ToInt32(ViewData["ItemsPerPage"]) == 5)">5</option>
+                <option value="8" selected="@(Convert.ToInt32(ViewData["ItemsPerPage"]) == 8)">8</option>
+            </select>
+        </div>
     </form>
 
-    <div>    
-        <label for="items per page">Items per page</label>
-        <select id="items per page" asp-action="Index">
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="8">8</option>
-        </select>
-    </div>
 
     <div>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
@@ -35,7 +35,8 @@
             <tr>
                 <th>
                     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]"
-                       asp-route-searchString="@ViewData["CurrentFilter"]">
+                       asp-route-searchString="@ViewData["CurrentFilter"]"
+                       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]">
 
                         LastName
                     </a>
@@ -47,7 +48,8 @@
                 </th>
                 <th>
                     <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]"
-                       asp-route-searchString="@ViewData["CurrentFilter"]">
+                       asp-route-searchString="@ViewData["CurrentFilter"]"
+                       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]">
                         @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
                         EnrollmentDate
                     </a>
@@ -95,6 +97,7 @@
     <a asp-action="Index"
        asp-route-pageIndex="@(Model.PageIndex - 1)"
        asp-route-searchString="@ViewData["CurrentFilter"]"
+       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
        class="btn btn-outline-light @prevDisabled">
         Prev
     </a>
@@ -103,6 +106,7 @@
         {
             <a asp-action="Index" asp-route-pageIndex="@i"
                asp-route-searchString="@ViewData["CurrentFilter"]"
+               asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
                 class=@(i == Model.PageIndex ? "selected-page" : "pagination-item")>
                 @i
             </a>
@@ -111,6 +115,7 @@
     <a asp-action="Index"
        asp-route-pageIndex="@(Model.PageIndex + 1)"
        asp-route-searchString="@ViewData["CurrentFilter"]"
+       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
        class="btn btn-outline-light @nextDisabled">
         Next
     </a>
