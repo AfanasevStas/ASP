@@ -5,50 +5,89 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Course</h1>
+<div class="controls">
+    <h1>Courses</h1>
+    <form asp-action="Index" method="get">
+        <label>
+            Поиск по названию:
+            <input type="search" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Поиск" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-dark">Сброс</a>
+        </label>
+        <div>
+            <label for="items-per-page">Items per page</label>
+            <select id="items-per-page" name="itemsPerPage" onchange="this.form.submit()">
+                <option value="3" selected="@(Convert.ToInt32(ViewData["ItemsPerPage"]) == 3)">3</option>
+                <option value="5" selected="@(Convert.ToInt32(ViewData["ItemsPerPage"]) == 5)">5</option>
+                <option value="8" selected="@(Convert.ToInt32(ViewData["ItemsPerPage"]) == 8)">8</option>
+            </select>
+        </div>
+    </form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table" style="color: white;">
-    <thead>
-        <tr>
-            <th>
-                @* @Html.DisplayNameFor(model => model.Title) *@
-                Title
-            </th>
-            <th>
-                @* @Html.DisplayNameFor(model => model.Credits) *@
-                Credits
-            </th>
-            <th>
-                @* @Html.DisplayNameFor(model => model.Enrollments) *@
-                Enrollments
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Credits)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Enrollments)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CourseID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CourseID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+
+    <div>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </div>
+</div>
+<div class="table-container">
+    <table class="table" style="color: white;">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]"
+                       asp-route-searchString="@ViewData["CurrentFilter"]"
+                       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]">
+
+                        @* LastName *@
+                        @Html.DisplayNameFor(m => Model.First().Title)
+                    </a>
+                    @* @Html.DisplayNameFor(model => model.LastName) *@
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.FirstName) *@
+                    @* FirstName *@
+                    @Html.DisplayNameFor(m => Model.First().Credits)
+                </th>
+                <th>
+@*                     <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]"
+                       asp-route-searchString="@ViewData["CurrentFilter"]"
+                       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"> *@
+                        @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
+                        @* EnrollmentDate *@
+                         @Html.DisplayNameFor(m => Model.First().Enrollments) 
+                    </a>
+                    @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
+                </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.Enrollments) *@
+                    @* Enrollments *@
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Credits)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Enrollments)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CourseID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CourseID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CourseID">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
 </table>
+</div>
 @{
     string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
     string nextDisabled = Model.HasNextPage ? "" : "disabled";
@@ -57,6 +96,8 @@
 <div class="pagination-controls">
     <a asp-action="Index"
        asp-route-pageIndex="@(Model.PageIndex - 1)"
+       asp-route-searchString="@ViewData["CurrentFilter"]"
+       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
        class="btn btn-outline-light @prevDisabled">
         Prev
     </a>
@@ -64,6 +105,8 @@
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <a asp-action="Index" asp-route-pageIndex="@i"
+               asp-route-searchString="@ViewData["CurrentFilter"]"
+               asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
                class=@(i == Model.PageIndex ? "selected-page" : "pagination-item")>
                 @i
             </a>
@@ -71,6 +114,8 @@
     </div>
     <a asp-action="Index"
        asp-route-pageIndex="@(Model.PageIndex + 1)"
+       asp-route-searchString="@ViewData["CurrentFilter"]"
+       asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
        class="btn btn-outline-light @nextDisabled">
         Next
     </a>

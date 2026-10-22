@@ -14,9 +14,34 @@ public class EnrollmentsController : Controller
     }
 
     // GET: ENROLLMENTS
-    public async Task<IActionResult> Index(int? pageIndex, int itemsPerPage = 10)    
+    public async Task<IActionResult> Index
+    (
+    string sortOrder,
+    string searchString,
+    int? pageIndex,
+    int itemsPerPage = 3
+    )
     {
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+        ViewData["CurrentFilter"] = searchString;
         IQueryable<Enrollment> enrollments = from enrollment in _context.Enrollments select enrollment;
+        if (!String.IsNullOrEmpty(searchString) && !String.IsNullOrWhiteSpace(searchString))
+        {
+            pageIndex = 1;
+            enrollments = enrollments.Where
+                (
+                    e => e.CourseID.ToString().Contains(searchString)
+                );
+        }
+
+        switch (sortOrder)
+        {
+            case "name_desc": enrollments = enrollments.OrderByDescending(s => s.CourseID); break;
+            default: enrollments = enrollments.OrderBy(s => s.CourseID); break;
+        }
+
+        ViewData["ItemsPerPage"] = itemsPerPage;
         int pageSize = itemsPerPage;
         return View(await PaginatedList<Enrollment>.CreateAsync(enrollments.AsNoTracking(), pageIndex ?? 1, pageSize));
     }

@@ -14,10 +14,36 @@ public class CoursesController : Controller
     }
 
     // GET: COURSES
-    public async Task<IActionResult> Index(int? pageIndex, int itemsPerPage = 5)
+    public async Task<IActionResult> Index
+        (
+        string sortOrder,
+        string searchString,
+        int? pageIndex,
+        int itemsPerPage = 3
+        )
     {
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+        ViewData["CurrentFilter"] = searchString;
         IQueryable<Course> courses = from course in _context.Courses select course;
+        if (!String.IsNullOrEmpty(searchString) && !String.IsNullOrWhiteSpace(searchString))
+        {
+            pageIndex = 1;
+            courses = courses.Where
+                (
+                    cours => cours.Title.Contains(searchString)
+                );
+        }
+
+        switch (sortOrder)
+        {
+            case "name_desc": courses = courses.OrderByDescending(s => s.Title); break;
+            default: courses = courses.OrderBy(s => s.Title); break;
+        }
+
+        ViewData["ItemsPerPage"] = itemsPerPage;
         int pageSize = itemsPerPage;
+
         return View(await PaginatedList<Course>.CreateAsync(courses.AsNoTracking(), pageIndex ?? 1, pageSize));
     }
 
