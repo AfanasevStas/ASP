@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ContosoUniversity.Models
 {
@@ -7,8 +8,14 @@ namespace ContosoUniversity.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CourseID { get; set; }
         public string Title { get; set; }
+        [Range(0,5)]
         public int Credits { get; set; }
 
+        [ForeignKey(nameof(Department))]
+        public int DepartmentID { get; set; }
+
         public ICollection<Enrollment> Enrollments { get; set; }
+        public Department Department { get; set; }
+        public ICollection<CourseAssignment> CourseAssignments { get; set; }
     }
 }
