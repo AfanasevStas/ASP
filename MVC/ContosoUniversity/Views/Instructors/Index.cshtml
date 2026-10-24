@@ -1,10 +1,11 @@
-@model IEnumerable<ContosoUniversity.Models.Instructor>
-
+@* @model IEnumerable<ContosoUniversity.Models.Instructor>
+ *@
+ @model ContosoUniversity.Models.VievModels.InstructorIndexData
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Instructors</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,29 +14,29 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @* @Html.DisplayNameFor(model => model.LastName) *@
+                @Html.DisplayNameFor(model => model.Instructors.First().LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @* @Html.DisplayNameFor(model => model.FirstName) *@
+                @Html.DisplayNameFor(model => model.Instructors.First().FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HireDate)
+                @* @Html.DisplayNameFor(model => model.HireDate) *@
+                @Html.DisplayNameFor(model => model.Instructors.First().HireDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfficeAssignment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseAssignment)
+                @Html.DisplayNameFor(model => model.Instructors.First().OfficeAssignment)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+@foreach (var item in Model.Instructors) 
+{
+            string selectedRow = "";
+            if (item.ID == (int?)ViewData["InstructorID"]) selectedRow = "table-success";
+            <tr>
             <td>
                 @Html.DisplayFor(model => item.LastName)
             </td>
@@ -46,15 +47,19 @@
                 @Html.DisplayFor(model => item.HireDate)
             </td>
             <td>
-                @Html.DisplayFor(model => item.FullName)
+                    @if (item.OfficeAssignment != null)
+                    {
+                        @item.OfficeAssignment.Location;
+                    }
             </td>
             <td>
-                @Html.DisplayFor(model => item.OfficeAssignment)
+                    @foreach (CourseAssignment ca in item.CourseAssignment)
+                    {
+                        @ca.Course.CourseID @ca.Course.Title <br/>
+                    }
             </td>
             <td>
-                @Html.DisplayFor(model => item.CourseAssignment)
-            </td>
-            <td>
+                <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
@@ -63,3 +68,34 @@
 }
     </tbody>
 </table>
+
+@if (Model.Courses != null)
+{
+    <h3>Courses taught by selected Instructor</h3>
+    <table class="table" style="color: white;">
+        <thead>
+            <tr>
+                <th></th>
+                <th>@Html.DisplayNameFor(c => c.Courses.First().CourseID)</th>
+                <th>@Html.DisplayNameFor(c => c.Courses.First().Title)</th>
+                <th>@Html.DisplayNameFor(c => c.Courses.First().Department)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Course course in Model.Courses)
+            {
+                string selectedRow = "";
+                if (course.CourseID == (int?)ViewData["CourseID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.ActionLink("Select","Index", new {courseID = course.CourseID})
+                    </td>
+                    <td>@course.CourseID</td>
+                    <td>@course.Title</td>
+                    <td>@course.Department.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
