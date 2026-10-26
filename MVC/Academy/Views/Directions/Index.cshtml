@@ -1,4 +1,5 @@
-@model IEnumerable<Academy.Models.Direction>
+@* @model IEnumerable<Academy.Models.Direction> *@
+@model Academy.Models.VievModels.DirectionsGroupsStudents
 
 @{
     ViewData["Title"] = "Index";
@@ -13,18 +14,20 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.direction_name)
+                @Html.DisplayNameFor(model => model.Directions.First().direction_name)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Directions) 
+{
         <tr>
             <td>
                 @Html.DisplayFor(model => item.direction_name)
             </td>
             <td>
+                <a asp-action="Index" asp-route-id="@item.direction_id">Select</a> |
                 <a asp-action="Edit" asp-route-id="@item.direction_id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.direction_id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.direction_id">Delete</a>
@@ -33,3 +36,64 @@
 }
     </tbody>
 </table>
+
+@if (Model.Groups != null)
+{
+    <h3>Groups by selected Direction</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>@Html.DisplayNameFor(c => c.Groups.First().group_name)</th>
+                <th>@Html.DisplayNameFor(c => c.Groups.First().learning_days)</th>
+                <th>@Html.DisplayNameFor(c => c.Groups.First().Direction)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Group group in Model.Groups)
+            {
+                string selectedRow = "";
+                string direction_title = group.Direction.direction_name;
+                if (group.direction == (int?)ViewData["DirectionID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.ActionLink("Select", "Index", new { groupID = group.group_id })
+                    </td>
+                    <td>@group.group_name</td>
+                    <td>@group.learning_days</td>
+                    <td>@direction_title</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.Students != null)
+{
+    <h3>Students by selected Group</h3>
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>@Html.DisplayNameFor(c => c.Students.First().FullName)</th>
+                <th>@Html.DisplayNameFor(c => c.Students.First().Age)</th>
+                <th>@Html.DisplayNameFor(c => c.Students.First().Group)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Student student in Model.Students)
+            {
+                string selectedRow = "";
+                string group_title = student.Group.group_name;
+                if (student.group == (int?)ViewData["GroupID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>@student.FullName</td>
+                    <td>@student.Age</td>
+                    <td>@group_title</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

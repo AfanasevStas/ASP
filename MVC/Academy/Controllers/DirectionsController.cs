@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Academy.Models.VievModels;
 
 public class DirectionsController : Controller
 {
@@ -13,11 +14,58 @@ public class DirectionsController : Controller
     }
 
     // GET: DIRECTIONS
-    public async Task<IActionResult> Index()    
+    //public async Task<IActionResult> Index()    
+    //{
+    //    var directions = await _context.Directions.ToListAsync();
+    //    return View(directions);
+    //}
+
+    public async Task<IActionResult> Index(int? id, int? groupID)
     {
-        var directions = await _context.Directions.ToListAsync();
-        return View(directions);
+        DirectionsGroupsStudents viewModel = new DirectionsGroupsStudents();
+        viewModel.Directions = await _context
+            .Directions
+            .AsNoTracking()
+            .OrderBy(i => i.direction_name)
+            .ToListAsync();
+        //viewModel.Groups = await _context
+        //    .Groups
+        //    .AsNoTracking()
+        //    .OrderBy(i => i.group_name)
+        //    .ToListAsync();
+        //viewModel.Students = await _context
+        //    .Students
+        //    .AsNoTracking()
+        //    .OrderBy(i => i.last_name)
+        //    .ToListAsync();
+
+        if (id != null)
+        {
+            ViewData["DirectionID"] = id.Value;
+            viewModel.Groups = await _context
+                .Groups
+                .Where(i => i.direction == id.Value)
+                .Include(i => i.Direction)
+                .AsNoTracking()
+                .OrderBy(i => i.group_name)
+                .ToListAsync();
+        }
+
+        if (groupID != null)
+        {
+            ViewData["GroupID"] = groupID.Value;
+            viewModel.Students = await _context
+                .Students
+                .Where(i => i.group == groupID.Value)
+                .Include(i => i.Group)
+                .AsNoTracking()
+                .OrderBy(i => i.last_name)
+                .ToListAsync();
+        }
+
+        return View(viewModel);
     }
+
 
     // GET: DIRECTIONS/Details/5
     public async Task<IActionResult> Details(int? id)
