@@ -50,15 +50,15 @@ public class CoursesController : Controller
 
 
     // GET: COURSES/Details/5
-    public async Task<IActionResult> Details(int? courseid)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (courseid == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var course = await _context.Courses
-            .FirstOrDefaultAsync(m => m.CourseID == courseid);
+            .FirstOrDefaultAsync(m => m.CourseID == id);
         if (course == null)
         {
             return NotFound();
@@ -91,14 +91,14 @@ public class CoursesController : Controller
     }
 
     // GET: COURSES/Edit/5
-    public async Task<IActionResult> Edit(int? courseid)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (courseid == null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var course = await _context.Courses.FindAsync(courseid);
+        var course = await _context.Courses.FindAsync(id);
         if (course == null)
         {
             return NotFound();
@@ -112,7 +112,7 @@ public class CoursesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? courseid, [Bind("CourseID,Title,Credits,Enrollments")] Course course)
+    public async Task<IActionResult> Edit(int? courseid, [Bind("CourseID,Title,Credits,DepartmentID")] Course course)
     {
         if (courseid != course.CourseID)
         {
