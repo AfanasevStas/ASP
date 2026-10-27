@@ -18,6 +18,12 @@ namespace ContosoUniversity.Models
         [DisplayFormat(DataFormatString = "{0:yyyy.MM.dd}",ApplyFormatInEditMode = true)]
         public DateTime EnrollmentDate { get; set; }
 
+        //Calculated properties:
+        public string FullName
+        {
+            get => $"{LastName} {FirstName}";
+        }
+        //Navigation properties:
         public ICollection<Enrollment> Enrollments { get; set; }
     }
 }
