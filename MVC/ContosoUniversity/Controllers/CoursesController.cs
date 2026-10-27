@@ -2,6 +2,7 @@
 using ContosoUniversity;
 using ContosoUniversity.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 public class CoursesController : Controller
@@ -69,6 +70,7 @@ public class CoursesController : Controller
     // GET: COURSES/Create
     public IActionResult Create()
     {
+        PopulateDepartmentsDropdownList();
         return View();
     }
 
@@ -77,7 +79,7 @@ public class CoursesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("CourseID,Title,Credits,Enrollments")] Course course)
+    public async Task<IActionResult> Create([Bind("CourseID,Title,Credits,DepartmentID")] Course course)
     {
         if (ModelState.IsValid)
         {
@@ -101,6 +103,7 @@ public class CoursesController : Controller
         {
             return NotFound();
         }
+        PopulateDepartmentsDropdownList(course.DepartmentID);
         return View(course);
     }
 
@@ -175,5 +178,20 @@ public class CoursesController : Controller
     private bool CourseExists(int? courseid)
     {
         return _context.Courses.Any(e => e.CourseID == courseid);
+    }
+
+    void PopulateDepartmentsDropdownList(object selectedDepartment = null)
+    {
+        IQueryable<Department> departments = 
+            from department in _context.Departments
+            orderby department.Name
+            select department;
+        ViewBag.DepartmentID = new SelectList
+            (
+                departments.AsNoTracking(),
+                "DepartmentID",
+                "Name",
+                selectedDepartment
+            );
     }
 }
