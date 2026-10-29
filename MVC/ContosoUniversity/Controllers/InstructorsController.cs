@@ -25,11 +25,11 @@ public class InstructorsController : Controller
 		InstructorIndexData viewModel = new InstructorIndexData();
 		viewModel.Instructors = await _context
 			.Instructors.Include(i => i.OfficeAssignment)
-			.Include(i => i.CourseAssignment)
+			.Include(i => i.CourseAssignments)
 			.ThenInclude(ca => ca.Course)
 			.ThenInclude(c => c.Enrollments)
 			.ThenInclude(e => e.Student)
-			.Include(i => i.CourseAssignment)
+			.Include(i => i.CourseAssignments)
 			.ThenInclude(ca => ca.Course)
 			.ThenInclude(c => c.Department)
 			.AsNoTracking()
@@ -43,7 +43,7 @@ public class InstructorsController : Controller
 				.Instructors
 				.Where(i => i.ID == id.Value).Single();
 			viewModel.Courses = instructor
-				.CourseAssignment
+				.CourseAssignments
 				.Select(ca => ca.Course);
 		}
 
@@ -123,11 +123,12 @@ public class InstructorsController : Controller
 	// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> EditPost(int? id)
+	//public async Task<IActionResult> EditPost(int? id)
+	public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,HireDate,FullName,OfficeAssignment")] Instructor instructor)
 	{
 		if (id == null) return NotFound();
 
-		Instructor instructor = await _context.Instructors
+		instructor = await _context.Instructors
 			.Include(i => i.OfficeAssignment)
 			.FirstOrDefaultAsync(i => i.ID == id);
 
