@@ -219,13 +219,13 @@ public class InstructorsController : Controller
 								CourseID = course.CourseID,
 							}
 						);
-				else if (instructorCourses.Contains(course.CourseID))
-				{
-					CourseAssignment courseToRemove = instructor
-						.CourseAssignments
-						.FirstOrDefault(ca => ca.CourseID == course.CourseID);
-					_context.Remove(courseToRemove);
-				}
+			}
+			else if (instructorCourses.Contains(course.CourseID))
+			{
+				CourseAssignment courseToRemove = instructor
+					.CourseAssignments
+					.FirstOrDefault(ca => ca.CourseID == course.CourseID);
+				_context.Remove(courseToRemove);
 			}
 		}
 	}
